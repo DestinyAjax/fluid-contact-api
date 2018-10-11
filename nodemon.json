@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "index.js",
+        "config/",
+        "controllers/",
+        "models/",
+        "migrations/",
+        "routes/",
+        "services/"
+    ]
+}
