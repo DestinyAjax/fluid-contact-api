@@ -24,7 +24,6 @@ class UserController {
     })(request, response, next);
   }
 
-
   /** user signup function which returns a Promise on success or failure */
   static SignUp(request, response, next) {
     if (!request.body.email || !request.body.password || !request.body.username) {
