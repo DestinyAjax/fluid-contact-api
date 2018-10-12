@@ -6,12 +6,15 @@
   "author": "Destiny Ajakaiye",
   "license": "MIT",
   "scripts": {
-    "start": "node ./app.js",
-    "dev": "nodemon ./index.js"
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js",
+    "test": "mocha --timeout 10000"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "cors": "^2.8.4",
     "ejs": "^2.6.1",
     "errorhandler": "^1.5.0",
@@ -22,6 +25,7 @@
     "express-session": "^1.15.6",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.3.0",
+    "mochawesome": "^3.0.3",
     "mysql2": "^1.6.1",
     "nodemon": "^1.18.4",
     "passport": "^0.4.0",
@@ -33,5 +37,9 @@
   },
   "devDependencies": {
     "mocha": "^5.2.0"
+  },
+  "engines": {
+    "node": "8.11.x",
+    "npm": "6.4.x"
   }
 }
