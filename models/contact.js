@@ -8,7 +8,12 @@ const Contact = sequelize.define('Contact', {
   address: DataTypes.STRING,
   telephone: DataTypes.STRING,
   email: DataTypes.STRING,
-  user_id: {
+  starred: { 
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false
+  },
+  UserId: {
     type: DataTypes.INTEGER,
     reference: {
       model: User,
