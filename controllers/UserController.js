@@ -1,5 +1,6 @@
 const passport = require('passport');
 const User = require('../models/user');
+const utility = require('../config/utilities');
 
 class UserController {
 
@@ -16,8 +17,8 @@ class UserController {
       if (err) { return next(err); }
 
       if (user) {
-        user.token = user.generateJWT();
-        return response.json({ user: user.ToAuthJSON() });
+        user.token = utility.getJWT(user);
+        return response.json({ token: utility.ToAuthJSON(user) });
       } 
       
       return response.status(422).json(info);
@@ -30,14 +31,14 @@ class UserController {
       response.status(422).json({
         error: 'Invalid Request. All fields are required'
       });
+    } else {
+      const user = new User(request.body);
+      user.setPassword(request.body.password);
+
+      user.save().then(data => response.json({
+        user: utility.ToAuthJSON(data)
+      })).catch(err => next(err));
     }
-
-    const user = new User(request.body);
-    user.setPassword(request.body.password);
-
-    user.save().then(data => response.json({
-      payload: data.ToAuthJSON()
-    })).catch(err => next(err));
   }
 
 

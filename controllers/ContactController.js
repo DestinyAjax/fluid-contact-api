@@ -1,4 +1,5 @@
 const Contact = require('../models/contact');
+const User = require('../models/user');
 
 class ContactController {
 
@@ -11,17 +12,11 @@ class ContactController {
  * @memberof ContactController
  */
   static allContacts(request, response, next) {
-    if (!request.params.id) {
-      request.logout();
-      response.status(422).json({'error': 'Invalid user: Please sigin to create a contact'});
-    }
-
     try {
       /** query contacts by the logged in user id */
-      const user_id = request.params.id;
-      Contact.findAll({ where: { user_id: user_id } }).then((contacts) => {
+      User.findOne({ where: { id: request.user.id }, include: [ Contact ] }).then((contacts) => {
         response.json({
-          contacts: contacts
+          contacts: contacts.Contacts
         });
       });
     } catch (err) {
@@ -29,14 +24,14 @@ class ContactController {
     }
   }
 
-    /**
-     * function to create new contact by logged in user
-     *
-     * @param {*} request
-     * @param {*} response
-     * @param {*} next
-     * @memberof ContactController
-     */
+  /**
+   * function to create new contact by logged in user
+   *
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @memberof ContactController
+   */
   static createContact(request, response, next) {
     /** validating income request */
     if (!request.body.email) {
@@ -51,15 +46,14 @@ class ContactController {
     if (!request.body.fullname) {
       response.status(422).json({'error': 'Please provide contact full name'});
     }
-    if (!request.body.user_id) {
-      request.logout();
+    if (!request.user.id) {
       response.status(422).json({'error': 'Invalid user: Please sigin to create a contact'});
     }
     
     try {
       /** process in the data the storeing new contact by user */
       const contact = new Contact(request.body);
-      contact.user_id = request.body.user_id;
+      contact.UserId = request.user.id;
         
       contact.save().then(data => 
         response.json({payload: data }
@@ -98,26 +92,108 @@ class ContactController {
     } catch (err) {
       return next(err);
     }
-    
   }
 
-    // static viewOneContact(request, response, next) {
+  /**
+   *
+   * @description function responsible for viewing a single contact
+   * @static
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @memberof ContactController
+   */
+  static viewOneContact(request, response, next) {
+    if (!request.params.id) {
+      response.status(422).json({error: 'Invalid request'});
+    } else {
+      try {
+        const contact_id = request.params.id;
+        Contact.findById(contact_id).then(contact => {
+          response.json(contact) 
+        })
+        .catch(err => response.json(err));
+      } catch (err) {
+        return next(err);        
+      }
+    }
+  }
 
-    // }
+  /**
+   *
+   * @description function responsible for deleting a single contact
+   * @static
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @memberof ContactController
+   */
+  static deleteContact(request, response, next) {
+    if (!request.params.id) {
+      response.status(422).json({error: 'Invalid request'});
+    } else {
+      try {
+        const contact_id = request.params.id;
+        Contact.destroy({ where: { id: contact_id }}).then(() => {
+          response.json({ message: 'Contact deleted successfully'}) 
+        })
+        .catch(err => response.json(err));
+      } catch (err) {
+        return next(err);        
+      }
+    }
+  }
 
-    
+  /**
+   *
+   *
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @memberof ContactController
+   */
+  static starOneContact(request, response, next) {
+    if (!request.params.id) {
+      response.status(422).json({error: 'Contact not found'});
+    } else {
+      try {
+        const contact_id = request.params.id;
+        Contact.findOne({ where: { id: contact_id }}).then(contact => {
+          contact.starred = true;
+          contact.save().then(data => response.json({
+            message: 'Contact starred successfully'
+          })).catch(err => response.json(err));
+        });
+      } catch (err) {
+        return next(err);        
+      }
+    }
+  }
 
-    // static deleteContact(request, response, next) {
-
-    // }
-
-    // starOneContact(request, response, next) {
-
-    // }
-
-    // allStarContacts(request, response, next) {
-
-    // }
+  /**
+   *
+   * @description function responsible for viewing all star contacts
+   * @static
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @returns
+   * @memberof ContactController
+   */
+  static allStarContacts(request, response, next) {
+    try {
+      /** query star contacts by the logged in user id */
+      Contact.findAll({
+        where: {
+          UserId: request.params.userId,
+          starred: true
+        }
+      }).then(payload => response.json(payload))
+      .catch(err => response.json(err));
+    } catch (err) {
+        return response.status(500).json(err);
+    }
+  }
 }
 
 module.exports = ContactController;

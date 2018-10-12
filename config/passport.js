@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Users = require('../models/user');
+const utility = require('../config/utilities');
 
 /** configuring password authentication */
 passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'},
@@ -10,12 +11,11 @@ passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password
         return done(null, false, { errors: { error: 'Incorrect username' } });
       }
 
-      if (!user.validPassword(password)) {
+      if (!utility.validPassword(password, user.password, user.salt)) {
         return done(null, false, { errors: { error: 'Incorrect password' } });
+      } else {
+        return done(null, user);
       }
-        
-      return done(null, user);
-      
     }).catch(done)}
 ));
 

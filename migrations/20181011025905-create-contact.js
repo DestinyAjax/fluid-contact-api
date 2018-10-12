@@ -20,8 +20,13 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      user_id: {
+      UserId: {
         type: Sequelize.INTEGER
+      },
+      starred: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
