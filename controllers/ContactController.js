@@ -5,7 +5,7 @@ class ContactController {
 
 /**
  *
- *@description function responsible for view contacts created by user
+ * @description function responsible for view contacts created by user
  * @param {*} request
  * @param {*} response
  * @param {*} next
@@ -56,7 +56,10 @@ class ContactController {
       contact.UserId = request.user.id;
         
       contact.save().then(data => 
-        response.json({payload: data }
+        response.json({
+          message: "Contact created successfully",
+          payload: data 
+        }
       )).catch(err => next(err));
     } catch (err) {
       return next(err);
@@ -85,6 +88,7 @@ class ContactController {
           contact.fullname = request.body.fullname;
           contact.telephone = request.body.telephone;
           contact.save().then(data => response.json({
+            message: "Updated successfully",
             payload: data
           })).catch(err => response.json(err));
         }

@@ -8,7 +8,11 @@
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
-    "test": "mocha --timeout 10000"
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/destinyajax/fluid-contact-api.git"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -40,6 +44,6 @@
   },
   "engines": {
     "node": "8.11.x",
-    "npm": "6.4.x"
+    "yarn": "0.24.x"
   }
 }

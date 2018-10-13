@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const jwt = require('express-jwt');
 
 /** function to get token from request headers */
