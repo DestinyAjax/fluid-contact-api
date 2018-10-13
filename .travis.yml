@@ -7,6 +7,14 @@ addons:
     code_climate:
         repo_token: f0411ee6db8484048836d3b2ccff1207ca78e8da422549c0256bc6a3c6e53634
 
+sudo: required
+# services: mongodb
+
+install: yarn
+
+before_script: yarn start & sleep 5
+script: yarn test
+
 # script: istanbul cover node_modules/mocha/bin/_mocha -- -R spec
 
 # before_script:
