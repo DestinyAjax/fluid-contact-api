@@ -4,7 +4,14 @@ const utility = require('../config/utilities');
 
 class UserController {
 
-  /** user signin function which returns a Promise on success or failure */
+  /**
+ *
+ * @description user signin function which returns a Promise on success or failure
+ * @param {*} request
+ * @param {*} response
+ * @param {*} next
+ * @memberof UserController
+ */
   static SignIn(request, response, next) {
     if (!request.body.email) {
       return response.status(422).json({errors: {email: 'Email is reduired'}});
@@ -25,7 +32,14 @@ class UserController {
     })(request, response, next);
   }
 
-  /** user signup function which returns a Promise on success or failure */
+  /**
+ *
+ * @description user signup function which returns a Promise on success or failure
+ * @param {*} request
+ * @param {*} response
+ * @param {*} next
+ * @memberof UserController
+ */
   static SignUp(request, response, next) {
     if (!request.body.email || !request.body.password || !request.body.username) {
       response.status(422).json({
@@ -42,7 +56,14 @@ class UserController {
   }
 
 
-  /** user signout function which returns a Promise */
+  /**
+ *
+ * @description user signout function 
+ * @param {*} request
+ * @param {*} response
+ * @param {*} next
+ * @memberof UserController
+ */
   static SignOut(request, response) {
     request.logout();
     return response.status(200).json({ msg: 'Logged out Successfully' });

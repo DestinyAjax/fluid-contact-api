@@ -2,7 +2,10 @@ const Sequelize = require('sequelize');
 const database = require('./config');
 
 let sequelize;
+
 if (process.env.DATABASE_URL) {
+
+  /** @type {Sequelize} [database connection for heroku production] */
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect:  'postgres',
     protocol: 'postgres',
@@ -10,7 +13,10 @@ if (process.env.DATABASE_URL) {
     host:     "<heroku host>",
     logging:  true //false
   });
+
 } else {
+  
+  /** @type {Sequelize} [database connection for development env] */
   sequelize = new Sequelize(
     database.development.database,
     database.development.username,
